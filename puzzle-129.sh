@@ -50,4 +50,4 @@ echo "Keyspace: $KEYSPACE"
 # Lancer clbitcrack avec les paramètres appropriés
 OUTPUT_FILE="wip_${RANGE_INDEX}.txt"
 ./bin/clbitcrack --list-devices
-./bin/clbitcrack -c --keyspace "$KEYSPACE" -o "$OUTPUT_FILE" $TARGET
+./bin/clbitcrack -c --keyspace "$KEYSPACE" -o "keys.txt" --continue "$OUTPUT_FILE" $TARGET
