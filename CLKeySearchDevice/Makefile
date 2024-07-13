@@ -6,7 +6,7 @@ all:
 	${BINDIR}/embedcl bitcrack.cl bitcrack_cl.cpp _bitcrack_cl
 
 	for file in ${CPPSRC} bitcrack_cl.cpp; do\
-		${CXX} -c $$file ${INCLUDE} -I${OPENCL_INCLUDE} ${CXXFLAGS};\
+		${CXX} -c $$file ${INCLUDE} ${OPENCL_CONFIG} ${CXXFLAGS};\
 	done
 
 	ar rvs ${LIBDIR}/lib$(NAME).a *.o

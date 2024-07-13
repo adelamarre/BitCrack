@@ -9,6 +9,15 @@ CLKeySearchDevice/bitcrack.cl
 CLKeySearchDevice/bitcrack_cl.cpp
 CLUnitTests/test.cpp
 CLUnitTests/test.cl
+CLUnitTests/cltest.cpp
+CLUnitTests/cltest.cl
+embedcl/embedcl
+
+*.bin
+*.txt
+
+# Darwin build results
+*.a
 
 # Linux build results
 *.o

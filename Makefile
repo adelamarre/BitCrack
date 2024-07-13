@@ -10,12 +10,12 @@ LIBS+=-L$(LIBDIR)
 
 # C++ options
 CXX=g++
-CXXFLAGS=-O2 -std=c++11
+CXXFLAGS=-O2 -std=c++14
 
 # CUDA variables
 COMPUTE_CAP=30
 NVCC=nvcc
-NVCCFLAGS=-std=c++11 -gencode=arch=compute_${COMPUTE_CAP},code=\"sm_${COMPUTE_CAP}\" -Xptxas="-v" -Xcompiler "${CXXFLAGS}"
+NVCCFLAGS=-std=c++14 -gencode=arch=compute_${COMPUTE_CAP},code=\"sm_${COMPUTE_CAP}\" -Xptxas="-v" -Xcompiler "${CXXFLAGS}"
 CUDA_HOME=/usr/local/cuda
 CUDA_LIB=${CUDA_HOME}/lib64
 CUDA_INCLUDE=${CUDA_HOME}/include
@@ -24,7 +24,12 @@ CUDA_MATH=$(CUR_DIR)/cudaMath
 # OpenCL variables
 OPENCL_LIB=${CUDA_LIB}
 OPENCL_INCLUDE=${CUDA_INCLUDE}
-OPENCL_VERSION=110
+OPENCL_VERSION=120
+OPENCL_CONFIG= -L${OPENCL_LIB} -I${OPENCL_INCLUDE} -lOpenCL
+
+ifeq ($(shell uname), Darwin)
+	OPENCL_CONFIG=-framework OpenCL
+endif
 
 export INCLUDE
 export LIBDIR
@@ -37,8 +42,7 @@ export CXXFLAGS
 export CUDA_LIB
 export CUDA_INCLUDE
 export CUDA_MATH
-export OPENCL_LIB
-export OPENCL_INCLUDE
+export OPENCL_CONFIG
 export BUILD_OPENCL
 export BUILD_CUDA
 
@@ -51,6 +55,9 @@ endif
 ifeq ($(BUILD_OPENCL),1)
 	TARGETS:=${TARGETS} dir_embedcl dir_clKeySearchDevice dir_clutil dir_clunittest
 	CXXFLAGS:=${CXXFLAGS} -DCL_TARGET_OPENCL_VERSION=${OPENCL_VERSION}
+	ifeq ($(shell uname), Darwin)
+		LIBS:=${LIBS} -framework OpenCL
+	endif
 endif
 
 all:	${TARGETS}
